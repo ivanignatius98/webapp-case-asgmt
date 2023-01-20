@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import Dashboard from '@/pages/dashboard';
+import Dashboard from '@/pages/books';
 
 export default function Home() {
   return (

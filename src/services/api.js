@@ -1,10 +1,9 @@
 
-const axios = require('axios');
-const jwt = require('jsonwebtoken')
-const execApi = (serviceName, url, payload, method, additionalHeaders = {}) => {
+const axios = require('axios')
+
+const execApi = (url, payload, method, additionalHeaders = {}) => {
   return new Promise((resolve) => {
     const headers = {
-      // ...generateToken(serviceName),
       ...additionalHeaders
     }
     axios({
@@ -24,22 +23,20 @@ const execApi = (serviceName, url, payload, method, additionalHeaders = {}) => {
 };
 
 module.exports = {
-  post: async (serviceName, endpoint, payload, header = {}) => {
+  post: async (endpoint, payload, header = {}) => {
     return await execApi(
-      serviceName,
       `${endpoint}`,
       payload,
       "POST",
       header
     );
   },
-  get: async (serviceName, endpoint, header = {}) => {
+  get: async (endpoint, header = {}) => {
     return await execApi(
-      serviceName,
       `${endpoint}`,
       {},
       "GET",
       header
     );
-  }
+  },
 };

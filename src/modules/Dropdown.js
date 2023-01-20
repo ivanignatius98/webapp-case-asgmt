@@ -19,7 +19,7 @@ export default function Dropdown({ children, dropdownItemData }) {
             leaveFrom="transform opacity-100 scale-100"
             leaveTo="transform opacity-0 scale-95"
           >
-            <Menu.Items className="absolute py-1 right-0 w-48 origin-top-right divide-y divide-gray-200 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 ">
+            <Menu.Items className="absolute py-1 right-0 w-48 origin-top-right divide-y divide-gray-200 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 z-20 ">
               {dropdownItemData.map((items, groupIndex) => (
                 <div className='py-2' key={groupIndex}>
                   {items.map(({ onClick, content }, i) => (

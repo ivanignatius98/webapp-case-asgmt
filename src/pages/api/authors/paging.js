@@ -1,7 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import { get } from "@/services/api";
 
-const baseUrl = "https://gclone-api-staging.up.railway.app/api/v1/books"
+const baseUrl = "https://gclone-api-staging.up.railway.app/api/v1/authors"
 export default async function handler(req, res) {
   try {
     const { page = 1, limit = 10, keyword = "" } = req.query
