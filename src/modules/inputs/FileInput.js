@@ -1,14 +1,14 @@
 import { AiFillCloseCircle } from "react-icons/ai";
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect, useMemo } from 'react'
 
-const Input = ({ children, prependText, ...props }) => {
+const Input = ({ children, prependText, existingPreview = null, ...props }) => {
   const classContainer = `w-max absolute z-10 top-[0px] right-[-16px] -translate-y-2 px-2 py-1 rounded flex items-center`
 
   const fileRef = useRef(null)
   const [state, setState] = useState({
     data: null,
     remove: false,
-    preview: "https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1024&h=1280&q=80"
+    preview: null
   })
 
   const remove = () => {
@@ -24,14 +24,17 @@ const Input = ({ children, prependText, ...props }) => {
     })
   }
   const handleChange = (event) => {
-    console.log(event)
     if (typeof event.target != 'undefined') {
       let data = event.target.files[0]
       let preview = ""
       if (event.target.files[0].type.includes('image')) {
         preview = URL.createObjectURL(data)
       }
-      props.onChange(event)
+      props.onChange({
+        target: {
+          name: props.name, value: preview
+        }
+      })
 
       setState({
         data,
@@ -40,6 +43,11 @@ const Input = ({ children, prependText, ...props }) => {
       })
     }
   }
+
+  const loadImage = () => {
+    return existingPreview && !state.preview ? "data:image/png;base64, " + existingPreview : state.preview
+  }
+  const image = useMemo(() => loadImage(), [existingPreview]);
   return (
     <div>
       <label htmlFor={props.name} className="block text-sm font-medium text-gray-700">
@@ -48,17 +56,20 @@ const Input = ({ children, prependText, ...props }) => {
       <div
         className="relative flex items-center"
       >
-        <button
-          className={classContainer}
-          onClick={() => { remove() }}
-        >
-          <AiFillCloseCircle size={22} color="red" />
-        </button>
+        {image &&
+          <button
+            className={classContainer}
+            onClick={() => { remove() }}
+          >
+            <AiFillCloseCircle size={22} color="red" />
+          </button>
+        }
         <div
           className="w-full  mt-1 flex justify-center rounded-md border border-gray-300 px-6 pt-5 pb-6"
         >
-          {state.preview ?
-            <img className="object-contain h-52 w-full" src={state.preview} /> :
+          {image ?
+            <img className="object-contain h-52 w-full" src={image} />
+            :
             <div
               className="space-y-1 text-center cursor-pointer"
               onClick={() => { fileRef.current.click() }}

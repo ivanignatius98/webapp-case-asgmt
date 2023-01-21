@@ -1,6 +1,5 @@
 
 const axios = require('axios')
-
 const execApi = (url, payload, method, additionalHeaders = {}) => {
   return new Promise((resolve) => {
     const headers = {
@@ -36,6 +35,14 @@ module.exports = {
       `${endpoint}`,
       {},
       "GET",
+      header
+    );
+  },
+  delete: async (endpoint, header = {}) => {
+    return await execApi(
+      `${endpoint}`,
+      {},
+      "DELETE",
       header
     );
   },
