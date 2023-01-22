@@ -41,9 +41,9 @@ export default function MyModal({ isOpen = false, setIsOpen, onSubmit, ...props 
                     {props.title}
                   </Dialog.Title>
                   <div className="mt-2">
-                    <p className="text-sm text-gray-500">
+                    <div className="text-sm text-gray-500">
                       {props.content}
-                    </p>
+                    </div>
                   </div>
 
                   <div className="mt-4 text-right">

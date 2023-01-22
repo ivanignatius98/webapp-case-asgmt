@@ -1,6 +1,6 @@
 
 const axios = require('axios')
-const execApi = (url, payload, method, additionalHeaders = {}) => {
+const execApi = (url, payload, method, additionalHeaders = {}, params = {}) => {
   return new Promise((resolve) => {
     const headers = {
       ...additionalHeaders
@@ -10,6 +10,7 @@ const execApi = (url, payload, method, additionalHeaders = {}) => {
       method,
       headers,
       data: payload,
+      params
     })
       .then((res) => {
         resolve(res);
@@ -30,12 +31,13 @@ module.exports = {
       header
     );
   },
-  get: async (endpoint, header = {}) => {
+  get: async (endpoint, header = {}, params) => {
     return await execApi(
       `${endpoint}`,
       {},
       "GET",
-      header
+      header,
+      params
     );
   },
   delete: async (endpoint, header = {}) => {

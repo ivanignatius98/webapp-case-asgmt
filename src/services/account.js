@@ -25,11 +25,13 @@ export const validateLogin = async ({ username, password }) => {
 export const getToken = () => {
   const user = localStorage.getItem("user");
   if (!user) {
-    return {}
+    return null
   }
   let decipher = crypto.createDecipher("aes-256-cbc", APP_KEY);
   let decrypted = decipher.update(user, "hex", "utf-8");
   decrypted += decipher.final("utf-8");
   const data = JSON.parse(decrypted)
+  const hours = moment.duration(moment().diff(data.token_time)).asHours()
+  if (hours >= 1) localStorage.removeItem("user")
   return data.token
 }

@@ -8,12 +8,14 @@ import { getToken } from '@/services/account'
 
 import Dialog from '@/modules/Dialog'
 import { useRouter } from 'next/router'
+import Loader from '@/modules/Loader'
 
 export default function Dashboard() {
   const router = useRouter()
   const [isOpen, setIsOpen] = useState(false)
   const [refresh, setRefresh] = useState(false)
   const [selectedId, setSelectedId] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   const handleDelete = async () => {
     setIsOpen(false)
@@ -67,27 +69,38 @@ export default function Dashboard() {
   ]
 
   useEffect(() => {
+    const login = async () => {
+      if (!getToken()) {
+        setLoading(true)
+        await validateLogin({ username: "ivanhandoko", password: "asd123" })
+        setLoading(false)
+      }
+    }
     // dev login
-    validateLogin({ username: "ivanhandoko", password: "asd123" })
+    login()
   }, [])
 
   return (
     <Layout>
-      <DataTable
-        url="/api/books/paging"
-        columns={columns}
-        postButton="/books/create"
-        refresh={refresh}
-      />
-      <Dialog
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-        onSubmit={handleDelete}
-        title="Confirm Delete"
-        content="This record will be deleted on confirm!"
-        submitButtonText="Delete"
-        dismissButtonText="Cancel"
-      />
+      {loading ? <Loader content="Logging" /> :
+        <>
+          <DataTable
+            url="/api/books/paging"
+            columns={columns}
+            postButton="/books/create"
+            refresh={refresh}
+          />
+          <Dialog
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+            onSubmit={handleDelete}
+            title="Confirm Delete"
+            content="This record will be deleted on confirm!"
+            submitButtonText="Delete"
+            dismissButtonText="Cancel"
+          />
+        </>
+      }
     </Layout >
   )
 }

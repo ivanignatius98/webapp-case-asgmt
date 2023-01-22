@@ -10,6 +10,7 @@ import { get } from '@/services/api';
 import { validate } from '@/helpers/validation';
 import Dialog from '@/modules/Dialog';
 import Spinner from '@/modules/Spinner';
+import Loader from '@/modules/Loader';
 const axios = require('axios')
 
 export default function Dashboard(props) {
@@ -86,7 +87,7 @@ export default function Dashboard(props) {
   }, [props.id])
 
   useMemo(() => {
-    setErrorMessage(errors.map((str, i) => <span key={i}>{str}</span>))
+    setErrorMessage(errors.map((str, i) => <p key={i}>{str}</p>))
   }, [errors])
 
   return (
@@ -97,15 +98,7 @@ export default function Dashboard(props) {
         title={<div className='text-center mb-2'>{"Errors!"}</div>}
         content={errorMessage}
       />
-      {loadingDetail &&
-        <div className="absolute bg-white bg-opacity-60 top-0 left-0 w-full h-full z-50 flex items-center justify-center">
-          <div className="flex items-center pb-48">
-            <span className="text-xl font-semibold mr-4">Loading</span>
-            <Spinner size={6} />
-          </div>
-        </div>
-      }
-
+      {loadingDetail && <Loader />}
       <div className="relative">
         <div className="md:grid md:grid-cols-3 md:gap-6">
           <div className="md:col-span-1">

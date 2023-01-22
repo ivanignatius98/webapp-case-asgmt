@@ -63,14 +63,16 @@ const DataTable = ({ columns, url, additionalFilter = "", refresh, showFilter = 
   const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
   const [data, setData] = useState([]);
   const [totalRows, setTotalRows] = useState(0);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [perPage, setPerPage] = useState(10);
 
-  const fetchData = async (page, reset) => {
-    if (!loading) {
+
+  const fetchData = async (page, reset, newPerPage) => {
+    if (!loading || reset) {
       setLoading(true)
+      const limit = newPerPage || perPage
       const keywordParam = showFilter && !reset ? `&keyword=${filterText}` : ""
-      const { data, status } = await get(`${url}?page=${page}&limit=${perPage}${keywordParam}${additionalFilter}`, { token: getToken() })
+      const { data, status } = await get(`${url}?page=${page}&limit=${limit}${keywordParam}${additionalFilter}`, { token: getToken() })
       if (status == 200) {
         setData(data.records)
         setTotalRows(data.count)
@@ -84,22 +86,16 @@ const DataTable = ({ columns, url, additionalFilter = "", refresh, showFilter = 
   };
 
   const handlePerRowsChange = async (newPerPage, page) => {
-    setLoading(true);
-    const keywordParam = showFilter ? `&keyword=${filterText}` : ""
-    const { data, status } = await get(`${url}?page=${page}&limit=${newPerPage}${keywordParam}${additionalFilter}`, { token: getToken() })
-    if (status == 200) {
-      setData(data.records)
-      setPerPage(newPerPage)
-    }
-    setLoading(false);
+    fetchData(page, false, newPerPage)
+    setPerPage(newPerPage)
   };
 
   // useEffect(() => {
   //   fetchData(1)
   // }, [])
   useEffect(() => {
-    fetchData(1)
-  }, [refresh])
+    fetchData(1, true)
+  }, [])
 
   const subHeaderComponentMemo = useMemo(() => {
     const handleClear = () => {
