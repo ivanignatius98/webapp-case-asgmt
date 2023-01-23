@@ -13,7 +13,7 @@ import Spinner from '@/modules/Spinner';
 import Loader from '@/modules/Loader';
 const axios = require('axios')
 
-export default function Dashboard(props) {
+export default function Form(props) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [loadingDetail, setLoadingDetail] = useState(false)
