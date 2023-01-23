@@ -10,6 +10,8 @@ export default async function handler(req, res) {
     const endpoint = _id ? `${_id}/update` : "create"
     payload.cover = payload.cover_data
     payload.author = payload.author_data
+    payload.categories = payload.categories_data
+
     const { status, data, error, message } = await post(
       `${baseUrl}/${endpoint}`,
       payload,

@@ -11,6 +11,7 @@ import { validate } from '@/helpers/validation';
 import Dialog from '@/modules/Dialog';
 import Spinner from '@/modules/Spinner';
 import Loader from '@/modules/Loader';
+import ReactSelect from "react-select"
 const axios = require('axios')
 
 export default function Form(props) {
@@ -26,6 +27,7 @@ export default function Form(props) {
     description: "",
     cover: "",
     author: "",
+    categories: [],
     fileRemoved: false
   });
   const formrules = {
@@ -44,6 +46,11 @@ export default function Form(props) {
 
   const handleSubmit = async () => {
     setLoading(true)
+    try {
+
+    } catch (error) {
+
+    }
     const errors = []
     for (let key in formrules) {
       const err = validate(state[key], formrules[key], key[0].toUpperCase() + key.substring(1, key.length))
@@ -63,6 +70,13 @@ export default function Form(props) {
         delete state.cover_data
       }
       state.author_data = state.author ? state.author?.value : null
+
+      let categories_data = []
+      if (state.categories?.length > 0) {
+        for (let row of state.categories)
+          categories_data.push(row.value)
+      }
+      state.categories_data = categories_data
 
       const { status } = await post("/api/books/store", state, { token: getToken() })
       if (status == 200) {
@@ -90,6 +104,11 @@ export default function Form(props) {
     setErrorMessage(errors.map((str, i) => <p key={i}>{str}</p>))
   }, [errors])
 
+  const categoryOptions = [
+    { value: "fiction", label: "Fiction" },
+    { value: "scifi", label: "Sci-fi" },
+    { value: "non-fiction", label: "Non Fiction" }
+  ]
   return (
     <>
       <Dialog
@@ -152,6 +171,24 @@ export default function Form(props) {
                     />
                   </div>
                 </div>
+                <div className="grid grid-cols-3 gap-6">
+                  <div className="col-span-3 sm:col-span-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Categories
+                    </label>
+                    <ReactSelect
+                      isMulti
+                      isClearable
+                      options={categoryOptions}
+                      name="categories"
+                      value={state.categories}
+                      onChange={(option) => handleInputChange({ target: { name: "categories", value: option } })}
+                      placeholder="Select categories..."
+                      className="text-sm"
+                    />
+                  </div>
+                </div>
+
                 <div>
                   <FileInput label="Cover Image" name="cover" onChange={handleInputChange} existingPreview={state.cover} />
                 </div>

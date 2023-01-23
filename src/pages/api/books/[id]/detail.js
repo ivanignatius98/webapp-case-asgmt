@@ -10,6 +10,7 @@ export default async function handler(req, res) {
     const record = data?.data?.record ?? null
     if (record) {
       record.author = record.author ? { value: record.author._id, label: record.author.name } : null
+      record.categories = record.categories ? record.categories.map((row) => { return { value: row, label: row[0].toUpperCase() + row.substring(1, row.length) } }) : null
     }
     res.status(status).json({ record, error, message })
   } catch (e) {
