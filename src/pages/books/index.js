@@ -82,7 +82,7 @@ export default function Dashboard() {
 
   return (
     <Layout>
-      {loading ? <Loader content="Logging" /> :
+      {loading ? <Loader content="Connecting" /> :
         <>
           <DataTable
             url="/api/books/paging"
