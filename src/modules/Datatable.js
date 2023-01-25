@@ -95,7 +95,7 @@ const DataTable = ({ columns, url, additionalFilter = "", refresh, showFilter = 
   // }, [])
   useEffect(() => {
     fetchData(1, true)
-  }, [])
+  }, [refresh])
 
   const subHeaderComponentMemo = useMemo(() => {
     const handleClear = () => {
